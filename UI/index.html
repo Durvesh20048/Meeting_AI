@@ -2,173 +2,278 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>AI Assistant</title>
+<title>AI Meeting Assistant</title>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
 body {
-  margin:0;
-  font-family:Segoe UI;
-  background:radial-gradient(circle,#0ea5e9,#020617);
-  color:white;
+  font-family: 'Segoe UI', sans-serif;
+  color: #e2e8f0;
+  overflow-x: hidden;
 }
 
-/* GLOW */
-.glow {
-  position:fixed;
-  width:300px;
-  height:300px;
-  background:radial-gradient(circle,rgba(56,189,248,0.3),transparent);
-  pointer-events:none;
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
 }
 
-/* CONTAINER */
-.container {
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  padding:40px;
+.navbar h1 { color: #38bdf8; }
+
+.nav-links a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
 }
 
-/* CARD */
-.card {
-  backdrop-filter:blur(10px);
-  background:rgba(255,255,255,0.05);
-  padding:20px;
-  margin:20px;
-  border-radius:15px;
-  width:600px;
+/* SECTIONS */
+.section {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
 }
 
-/* UPLOAD */
-.upload-box {
-  border:2px dashed #38bdf8;
-  padding:30px;
-  text-align:center;
-  cursor:pointer;
+.hero-text {
+  width: 50%;
+  text-align: left;
 }
+
+.hero-text h2 {
+  font-size: 50px;
+}
+
+.hero-text p {
+  margin-top: 15px;
+  opacity: 0.7;
+}
+
+.hero-image {
+  width: 45%;
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: 10px;
+}
+.hero-image img {
+  animation: float 4s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-10px); }
+}
+
+/* DIFFERENT BACKGROUNDS */
+.hero { background: linear-gradient(135deg, #020617, #0f172a); }
+.try { background: linear-gradient(135deg, #0f172a, #1e293b); }
+.contact { background: linear-gradient(135deg, #1e293b, #020617); }
+
+/* CONTENT */
+h2 { font-size: 30px; margin-bottom: 20px; }
+p { opacity: 0.7; }
 
 /* BUTTON */
-button {
-  margin-top:15px;
-  padding:10px 20px;
-  background:#38bdf8;
-  border:none;
-  border-radius:10px;
-  cursor:pointer;
+.btn-primary {
+  margin-top: 20px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  background: linear-gradient(45deg, #38bdf8, #0ea5e9);
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 20px rgba(56,189,248,0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 30px rgba(56,189,248,0.7);
 }
 
 
-/* OUTPUT */
-pre {
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  background: #020617;
-  padding: 20px;
-  border-radius: 12px;
-  margin-top: 10px;
+/* secondary buttons */
+.btn-secondary {
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #38bdf8;
+  background: transparent;
+  color: #38bdf8;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-  max-height: 300px;
-  overflow-y: auto;
+.btn-secondary:hover {
+  background: #38bdf8;
+  color: black;
+  transform: scale(1.05);
+}
+/* FLOATING WORDS */
+.word {
+  position: absolute;
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: 14px;
+}
+/* ICONS */
+.icon {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.7;
+  animation: bounce 5s infinite alternate ease-in-out;
+}
 
-  font-size: 15px;
-  line-height: 1.6;
+@keyframes bounce {
+  from { transform: translateY(0px); }
+  to { transform: translateY(20px); }
+}
+
+/* CONTACT */
+.contact a {
+  display: block;
+  margin: 10px;
+  color: #38bdf8;
+  text-decoration: none;
 }
 </style>
 </head>
 
 <body>
 
-
-
-<div class="container">
-
-<div class="card">
-<h2>Upload Audio</h2>
-
-<div class="upload-box" id="uploadBox">
-Click or Drag File
-<p id="fileName">No file</p>
+<!-- NAVBAR -->
+<div class="navbar">
+  <h1>MeetingAI</h1>
+  <div class="nav-links">
+    <a onclick="scrollToSection('try')">Insights</a>
+    <a onclick="scrollToSection('contact')">Connect</a>
+  </div>
 </div>
 
-<input type="file" id="fileInput" hidden>
+<!-- SECTION 1 -->
+<section class="section hero">
+  <div class="hero-content">
 
-<button onclick="uploadFile()">Analyze</button>
-<div id="loader" style="display:none; margin-top:10px;">
-  ⏳ Processing audio...
-</div>
-</div>
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>AI Meeting Assistant</h2>
+      <p>
+        AI-powered tool that converts meeting audio into summaries,
+        action items, and insights in real time.
+      </p>
+      <button onclick="scrollToSection('try')">Try Now ↓</button>
+    </div>
 
-<div class="card">
-<h3>Transcript</h3>
-<pre id="transcript">Waiting...</pre>
-</div>
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="meeting1.jpg" alt="AI Meeting Illustration">
+    </div>
 
-<div class="card">
-<h3>Analysis</h3>
-<pre id="analysis">Waiting...</pre>
-</div>
+  </div>
+</section>
 
-</div>
+<!-- SECTION 2 -->
+<section id="try" class="section try">
+  <div class="hero-content">
+
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>Try the Product</h2>
+      <p>Upload your meeting audio and get instant AI insights.</p>
+      <button class="btn-primary" onclick="openApp()">Launch App 🚀</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="AI.webp" alt="Try Product">
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="contact" class="section contact">
+  <div class="hero-content">
+
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>Connect</h2>
+      <p>Let’s build something amazing together.</p>
+
+      <button class="btn-secondary">GitHub</button>
+      <button class="btn-secondary">LinkedIn</button>
+      <button class="btn-secondary">Portfolio</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="developer 1.webp" alt="Contact">
+    </div>
+
+  </div>
+</section>
 
 <script>
-// glow
-document.addEventListener("mousemove",e=>{
-let g=document.getElementById("glow");
-g.style.left=e.clientX+"px";
-g.style.top=e.clientY+"px";
-});
+// Smooth scroll
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
 
-// file
-const fileInput=document.getElementById("fileInput");
-const uploadBox=document.getElementById("uploadBox");
+// Open main app
+function openApp() {
+  window.location.href = "app.html";
+}
 
-uploadBox.onclick=()=>fileInput.click();
+// RANDOM WORDS (static positions)
 
-fileInput.addEventListener("change",()=>{
-document.getElementById("fileName").innerText=fileInput.files[0].name;
-});
+for (let i = 0; i < 15; i++) {
+  const span = document.createElement("span");
+  span.className = "word";
+  span.innerText = words[Math.floor(Math.random() * words.length)];
 
-uploadBox.addEventListener("dragover",e=>e.preventDefault());
+  span.style.top = Math.random() * 100 + "%";
+  span.style.left = Math.random() * 100 + "%";
 
-uploadBox.addEventListener("drop",e=>{
-e.preventDefault();
-fileInput.files=e.dataTransfer.files;
-document.getElementById("fileName").innerText=fileInput.files[0].name;
-});
+  document.body.appendChild(span);
+}
 
-// API
-async function uploadFile(){
-  const file = fileInput.files[0];
-  if(!file) return alert("Select file");
+// RANDOM ICONS
+const icons = ["🖥️", "🎧", "📒"];
 
-  const loader = document.getElementById("loader");
-  const button = document.querySelector("button");
+for (let i = 0; i < 10; i++) {
+  const icon = document.createElement("div");
+  icon.className = "icon";
+  icon.innerText = icons[Math.floor(Math.random() * icons.length)];
 
-  loader.style.display = "block";
-  button.disabled = true;
-  button.innerText = "Processing...";
+  icon.style.top = Math.random() * 100 + "%";
+  icon.style.left = Math.random() * 100 + "%";
 
-  const formData = new FormData();
-  formData.append("file", file);
-
-  try {
-    const res = await fetch("http://127.0.0.1:8000/upload/", {
-      method: "POST",
-      body: formData
-    });
-
-    const data = await res.json();
-
-    document.getElementById("transcript").innerText = data.transcript;
-    document.getElementById("analysis").innerText = data.analysis;
-
-  } catch (err) {
-    alert("Error processing file");
-  }
-
-  loader.style.display = "none";
-  button.disabled = false;
-  button.innerText = "Analyze";
+  document.body.appendChild(icon);
 }
 </script>
 

@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Assistant</title>
+
+<style>
+body {
+  margin:0;
+  font-family:Segoe UI;
+  background:radial-gradient(circle,#0ea5e9,#020617);
+  color:white;
+}
+
+/* GLOW */
+.glow {
+  position:fixed;
+  width:300px;
+  height:300px;
+  background:radial-gradient(circle,rgba(56,189,248,0.3),transparent);
+  pointer-events:none;
+}
+
+/* CONTAINER */
+.container {
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:40px;
+}
+
+/* CARD */
+.card {
+  backdrop-filter:blur(10px);
+  background:rgba(255,255,255,0.05);
+  padding:20px;
+  margin:20px;
+  border-radius:15px;
+  width:600px;
+}
+
+/* UPLOAD */
+.upload-box {
+  border:2px dashed #38bdf8;
+  padding:30px;
+  text-align:center;
+  cursor:pointer;
+}
+
+/* BUTTON */
+button {
+  margin-top:15px;
+  padding:10px 20px;
+  background:#38bdf8;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+}
+
+
+/* OUTPUT */
+pre {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  background: #020617;
+  padding: 20px;
+  border-radius: 12px;
+  margin-top: 10px;
+
+  max-height: 300px;
+  overflow-y: auto;
+
+  font-size: 15px;
+  line-height: 1.6;
+}
+</style>
+</head>
+
+<body>
+
+
+
+<div class="container">
+
+<div class="card">
+<h2>Upload Audio</h2>
+
+<div class="upload-box" id="uploadBox">
+Click or Drag File
+<p id="fileName">No file</p>
+</div>
+
+<input type="file" id="fileInput" hidden>
+
+<button onclick="uploadFile()">Analyze</button>
+<div id="loader" style="display:none; margin-top:10px;">
+  ⏳ Processing audio...
+</div>
+</div>
+
+<div class="card">
+<h3>Transcript</h3>
+<pre id="transcript">Waiting...</pre>
+</div>
+
+<div class="card">
+<h3>Analysis</h3>
+<pre id="analysis">Waiting...</pre>
+</div>
+
+</div>
+
+<script>
+// glow
+document.addEventListener("mousemove",e=>{
+let g=document.getElementById("glow");
+g.style.left=e.clientX+"px";
+g.style.top=e.clientY+"px";
+});
+
+// file
+const fileInput=document.getElementById("fileInput");
+const uploadBox=document.getElementById("uploadBox");
+
+uploadBox.onclick=()=>fileInput.click();
+
+fileInput.addEventListener("change",()=>{
+document.getElementById("fileName").innerText=fileInput.files[0].name;
+});
+
+uploadBox.addEventListener("dragover",e=>e.preventDefault());
+
+uploadBox.addEventListener("drop",e=>{
+e.preventDefault();
+fileInput.files=e.dataTransfer.files;
+document.getElementById("fileName").innerText=fileInput.files[0].name;
+});
+
+// API
+async function uploadFile(){
+  const file = fileInput.files[0];
+  if(!file) return alert("Select file");
+
+  const loader = document.getElementById("loader");
+  const button = document.querySelector("button");
+
+  loader.style.display = "block";
+  button.disabled = true;
+  button.innerText = "Processing...";
+
+  const formData = new FormData();
+  formData.append("file", file);
+
+  try {
+    const res = await fetch("http://127.0.0.1:8000/upload/", {
+      method: "POST",
+      body: formData
+    });
+
+    const data = await res.json();
+
+    document.getElementById("transcript").innerText = data.transcript;
+    document.getElementById("analysis").innerText = data.analysis;
+
+  } catch (err) {
+    alert("Error processing file");
+  }
+
+  loader.style.display = "none";
+  button.disabled = false;
+  button.innerText = "Analyze";
+}
+</script>
+
+</body>
+</html>
