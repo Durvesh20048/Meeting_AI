@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>AI Meeting Assistant</title>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', sans-serif;
+  color: #e2e8f0;
+  overflow-x: hidden;
+}
+
+/* NAVBAR */
+.navbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  padding: 20px 50px;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0,0,0,0.5);
+  backdrop-filter: blur(10px);
+  z-index: 1000;
+}
+
+.navbar h1 { color: #38bdf8; }
+
+.nav-links a {
+  margin-left: 20px;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* SECTIONS */
+.section {
+  height: 100vh;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+.hero-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 90%;
+}
+
+.hero-text {
+  width: 50%;
+  text-align: left;
+}
+
+.hero-text h2 {
+  font-size: 50px;
+}
+
+.hero-text p {
+  margin-top: 15px;
+  opacity: 0.7;
+}
+
+.hero-image {
+  width: 45%;
+}
+
+.hero-image img {
+  width: 100%;
+  border-radius: 10px;
+}
+.hero-image img {
+  animation: float 4s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  from { transform: translateY(0px); }
+  to { transform: translateY(-10px); }
+}
+
+/* DIFFERENT BACKGROUNDS */
+.hero { background: linear-gradient(135deg, #020617, #0f172a); }
+.try { background: linear-gradient(135deg, #0f172a, #1e293b); }
+.contact { background: linear-gradient(135deg, #1e293b, #020617); }
+
+/* CONTENT */
+h2 { font-size: 30px; margin-bottom: 20px; }
+p { opacity: 0.7; }
+
+/* BUTTON */
+.btn-primary {
+  margin-top: 20px;
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  background: linear-gradient(45deg, #38bdf8, #0ea5e9);
+  color: black;
+  cursor: pointer;
+  transition: 0.3s;
+  box-shadow: 0 0 20px rgba(56,189,248,0.4);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px) scale(1.05);
+  box-shadow: 0 0 30px rgba(56,189,248,0.7);
+}
+
+
+/* secondary buttons */
+.btn-secondary {
+  margin: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: 1px solid #38bdf8;
+  background: transparent;
+  color: #38bdf8;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.btn-secondary:hover {
+  background: #38bdf8;
+  color: black;
+  transform: scale(1.05);
+}
+/* FLOATING WORDS */
+.word {
+  position: absolute;
+  color: #ffffff;
+  opacity: 0.6;
+  font-size: 14px;
+}
+/* ICONS */
+.icon {
+  position: absolute;
+  font-size: 30px;
+  opacity: 0.7;
+  animation: bounce 5s infinite alternate ease-in-out;
+}
+
+@keyframes bounce {
+  from { transform: translateY(0px); }
+  to { transform: translateY(20px); }
+}
+
+/* CONTACT */
+.contact a {
+  display: block;
+  margin: 10px;
+  color: #38bdf8;
+  text-decoration: none;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<div class="navbar">
+  <h1>MeetingAI</h1>
+  <div class="nav-links">
+    <a onclick="scrollToSection('try')">Insights</a>
+    <a onclick="scrollToSection('contact')">Connect</a>
+  </div>
+</div>
+
+<!-- SECTION 1 -->
+<section class="section hero">
+  <div class="hero-content">
+
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>AI Meeting Assistant</h2>
+      <p>
+        AI-powered tool that converts meeting audio into summaries,
+        action items, and insights in real time.
+      </p>
+      <button onclick="scrollToSection('try')">Try Now ↓</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="meeting1.jpg" alt="AI Meeting Illustration">
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 2 -->
+<section id="try" class="section try">
+  <div class="hero-content">
+
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>Try the Product</h2>
+      <p>Upload your meeting audio and get instant AI insights.</p>
+      <button class="btn-primary" onclick="openApp()">Launch App 🚀</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="AI.webp" alt="Try Product">
+    </div>
+
+  </div>
+</section>
+
+<!-- SECTION 3 -->
+<section id="contact" class="section contact">
+  <div class="hero-content">
+
+    <!-- LEFT -->
+    <div class="hero-text">
+      <h2>Connect</h2>
+      <p>Let’s build something amazing together.</p>
+
+      <button class="btn-secondary">GitHub</button>
+      <button class="btn-secondary">LinkedIn</button>
+      <button class="btn-secondary">Portfolio</button>
+    </div>
+
+    <!-- RIGHT -->
+    <div class="hero-image">
+      <img src="developer 1.webp" alt="Contact">
+    </div>
+
+  </div>
+</section>
+
+<script>
+// Smooth scroll
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: "smooth" });
+}
+
+// Open main app
+function openApp() {
+  window.location.href = "index.html";
+}
+
+// RANDOM WORDS (static positions)
+
+for (let i = 0; i < 15; i++) {
+  const span = document.createElement("span");
+  span.className = "word";
+  span.innerText = words[Math.floor(Math.random() * words.length)];
+
+  span.style.top = Math.random() * 100 + "%";
+  span.style.left = Math.random() * 100 + "%";
+
+  document.body.appendChild(span);
+}
+
+// RANDOM ICONS
+const icons = ["🖥️", "🎧", "📒"];
+
+for (let i = 0; i < 10; i++) {
+  const icon = document.createElement("div");
+  icon.className = "icon";
+  icon.innerText = icons[Math.floor(Math.random() * icons.length)];
+
+  icon.style.top = Math.random() * 100 + "%";
+  icon.style.left = Math.random() * 100 + "%";
+
+  document.body.appendChild(icon);
+}
+</script>
+
+</body>
+</html>
